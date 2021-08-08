@@ -2,13 +2,11 @@ package ru.ginatulin.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.ginatulin.exception.NotFoundException;
+import ru.ginatulin.exceptions.NotFoundException;
 import ru.ginatulin.models.dto.OrderCartDto;
-import ru.ginatulin.models.dto.OrderDto;
 import ru.ginatulin.models.dto.OrderItemCartDto;
 import ru.ginatulin.models.entity.OrderEntity;
 import ru.ginatulin.models.entity.OrderItemEntity;
-import ru.ginatulin.models.models.Response;
 import ru.ginatulin.repository.OrderItemRepository;
 import ru.ginatulin.repository.OrderRepository;
 
