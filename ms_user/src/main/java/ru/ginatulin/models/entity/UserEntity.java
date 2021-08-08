@@ -3,6 +3,8 @@ package ru.ginatulin.models.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import ru.ginatulin.models.dto.UserDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -34,4 +36,18 @@ public class UserEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deleted_at;
 
+    public UserEntity(UserDto user) {
+
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.userNickname = user.getUserNickname();
+        this.email = user.getEmail();
+        changePassword(user.getPassword());
+
+    }
+
+    public void changePassword(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+        this.password = encoder.encode(password);
+    }
 }
