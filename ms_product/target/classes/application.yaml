@@ -1,5 +1,7 @@
+jwt:
+  secret: apple
 server:
-  port: 2021
+  port: 0
   servlet:
     context-path: /api_v1
 spring:

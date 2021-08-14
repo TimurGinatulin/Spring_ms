@@ -8,10 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ms_storage" />
-        <module name="core_lib" />
         <module name="ms_user" />
         <module name="ms_delivery" />
         <module name="ms_product" />
+        <module name="routing_lib" />
+        <module name="core_lib" />
         <module name="ms_order" />
       </profile>
     </annotationProcessing>
@@ -24,6 +25,7 @@
       <module name="ms_product" options="-parameters" />
       <module name="ms_storage" options="-parameters" />
       <module name="ms_user" options="-parameters" />
+      <module name="routing_lib" options="-parameters" />
     </option>
   </component>
 </project>
