@@ -1,3 +1,5 @@
+jwt:
+  secret: apple
 server:
   port: 2021
   servlet:
