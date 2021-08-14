@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.ginatulin.core.interfaces.ITokenService;
 import ru.ginatulin.core.models.UserInfo;
+import ru.ginatulin.core.services.RedisService;
 import ru.ginatulin.users.models.dto.AuthRequestDto;
 import ru.ginatulin.users.models.dto.AuthResponseDto;
 import ru.ginatulin.users.models.dto.SignUpRequestDto;
@@ -19,6 +20,8 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserRestController {
     @Autowired
+    private RedisService redisService;
+    @Autowired
     private UserRestService userRestService;
 
     @Autowired
@@ -29,6 +32,12 @@ public class UserRestController {
     public void registerUser(@RequestBody SignUpRequestDto signUpRequest) {
         UserEntity user = new UserEntity(signUpRequest);
         userRestService.save(user);
+    }
+
+    @GetMapping("/logout")
+    @ResponseStatus(HttpStatus.OK)
+    public void logout(@RequestHeader("Authorization") String header) {
+        redisService.saveToken(header.replace("Bearer ", ""));
     }
 
     @PostMapping("/login")
