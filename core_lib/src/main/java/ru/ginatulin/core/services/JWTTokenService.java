@@ -1,4 +1,4 @@
-package ru.ginatulin.core;
+package ru.ginatulin.core.services;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;

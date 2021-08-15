@@ -3,6 +3,7 @@ package ru.ginatulin.users.controller.v1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import ru.ginatulin.core.interfaces.ITokenService;
 import ru.ginatulin.core.models.UserInfo;
 import ru.ginatulin.core.services.RedisService;
@@ -56,6 +57,7 @@ public class UserRestController {
 
     @GetMapping
     public List<UserEntity> getAllUsers(@RequestParam(required = false) Long id) {
+
         if (id != null)
             return userRestService.getById(id);
         return userRestService.getAllUsers();

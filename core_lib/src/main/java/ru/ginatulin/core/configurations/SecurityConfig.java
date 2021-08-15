@@ -16,10 +16,14 @@ import ru.ginatulin.core.interfaces.ITokenService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private  JWTAuthenticationFilter filter;
+    private JWTAuthenticationFilter filter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http

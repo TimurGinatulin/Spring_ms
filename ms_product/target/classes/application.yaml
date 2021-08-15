@@ -1,7 +1,7 @@
 jwt:
   secret: apple
 server:
-  port: 0
+  port: 45723
   servlet:
     context-path: /api_v1
 spring:
