@@ -16,10 +16,14 @@ import ru.ginatulin.core.interfaces.ITokenService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    ITokenService iTokenService;
+    private JWTAuthenticationFilter filter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -30,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .and()
-                .addFilterBefore(new JWTAuthenticationFilter(iTokenService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

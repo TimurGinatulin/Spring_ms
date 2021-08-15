@@ -1,4 +1,4 @@
-package ru.ginatulin.core;
+package ru.ginatulin.core.services;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,6 @@ public class JWTTokenService implements ITokenService {
     public String generateToken(UserInfo user) {
         Instant expirationTime = Instant.now().plus(1, ChronoUnit.HOURS);
         Date expirationDate = Date.from(expirationTime);
-
         String compactTokenString = Jwts.builder()
                 .claim("id", user.getUserId())
                 .claim("sub", user.getUserEmail())
@@ -29,7 +28,6 @@ public class JWTTokenService implements ITokenService {
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
-
         return "Bearer " + compactTokenString;
     }
 
@@ -38,10 +36,8 @@ public class JWTTokenService implements ITokenService {
         Jws<Claims> jwsClaims = Jwts.parser()
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token);
-
         String email = jwsClaims.getBody()
                 .getSubject();
-
         Long userId = jwsClaims.getBody()
                 .get("id", Long.class);
         List<String> roles = jwsClaims.getBody()
