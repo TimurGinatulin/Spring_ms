@@ -18,22 +18,30 @@
   <parent>
   <groupId>ru.ginatulin</groupId>
   <artifactId>shop_learning_spring2</artifactId>
-  <version>1.0-SNAPSHOT</version>
-</parent>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
   <artifactId>ms_user</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>ms_user</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>ru.ginatulin</groupId>
       <artifactId>core_lib</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ru.ginatulin</groupId>
+      <artifactId>routing_lib</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>

@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ms_storage" />
+        <module name="eureka-service" />
         <module name="ms_user" />
         <module name="ms_delivery" />
         <module name="ms_product" />
@@ -16,16 +17,21 @@
         <module name="ms_order" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="zuul-server" target="11" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="core_lib" options="-parameters" />
+      <module name="eureka-service" options="-parameters" />
       <module name="ms_delivery" options="-parameters" />
       <module name="ms_order" options="-parameters" />
       <module name="ms_product" options="-parameters" />
       <module name="ms_storage" options="-parameters" />
       <module name="ms_user" options="-parameters" />
       <module name="routing_lib" options="-parameters" />
+      <module name="zuul-server" options="" />
     </option>
   </component>
 </project>

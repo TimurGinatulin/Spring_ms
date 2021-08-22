@@ -1,7 +1,7 @@
 jwt:
   secret: apple
 server:
-  port: 2021
+  port: 0
   servlet:
    context-path: /api_v1
 spring:
@@ -9,8 +9,14 @@ spring:
     url: jdbc:mysql://localhost:3306/shop_user_db
     username: root
     password: root
+  application:
+    name: user-ms
 jpa:
   show-sql: true
   properties:
     hibernate:
       dialect: org.hibernate.dialect.MySQL8Dialect
+eureka:
+  client:
+    service-url:
+      default-zone: ${EUREKA_URI:http://localhost:8761/eureka}
