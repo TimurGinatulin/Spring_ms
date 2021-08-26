@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,5 +58,17 @@ public class DeliveryRestService {
             return deliveryRepository.save(delivery);
         }
         return null;
+    }
+
+    public List<DeliveryDto> findByIds(List<Long> ids) {
+        List<DeliveryDto> dtos = new ArrayList<>();
+        for (Long id : ids) {
+            try {
+                dtos.add(deliveryRepository.findById(id).map(DeliveryDto::new)
+                        .orElseThrow(() -> new NotFoundException("Delivery with id: " + id + " not found")));
+            } catch (NotFoundException e) {
+            }
+        }
+        return dtos;
     }
 }

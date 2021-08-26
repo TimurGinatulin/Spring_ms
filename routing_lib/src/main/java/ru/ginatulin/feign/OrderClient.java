@@ -9,6 +9,6 @@ import java.util.List;
 
 @FeignClient("order-ms")
 public interface OrderClient {
-    @GetMapping("/api_v1/orders")
+    @GetMapping("/api/v1/orders")
      List<OrderDto> getAllOrder(@RequestParam(required = false) Long id) ;
 }

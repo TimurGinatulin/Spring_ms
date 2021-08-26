@@ -1,5 +1,6 @@
 package ru.ginatulin.controller.v1;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.ginatulin.models.dto.OrderCartDto;
@@ -18,6 +19,7 @@ public class OrderRestController {
     private OrderRestService orderRestService;
 
     @GetMapping
+    @HystrixCommand(defaultFallback = "exampleMethod")
     public List<OrderDto> getAllOrder(@RequestParam(required = false) Long id) {
         if (id != null)
             return Collections.singletonList(orderRestService.findById(id)).stream().map(OrderDto::new).collect(Collectors.toList());
@@ -34,5 +36,9 @@ public class OrderRestController {
         return orderRestService.delete(id);
     }
 
-
+    public List<OrderDto> exampleMethod(Long id) {
+        OrderDto dto = new OrderDto();
+        dto.setId(-1l);
+        return Collections.singletonList(dto);
+    }
 }

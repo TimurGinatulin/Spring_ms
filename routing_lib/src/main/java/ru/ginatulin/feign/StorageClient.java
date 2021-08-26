@@ -9,6 +9,6 @@ import java.util.List;
 
 @FeignClient("storage-ms")
 public interface StorageClient {
-    @GetMapping("/api_v1/storages")
+    @GetMapping("/api/v1/storages")
     List<StorageCartDto> getAllStorages(@RequestParam(required = false) Long id);
 }

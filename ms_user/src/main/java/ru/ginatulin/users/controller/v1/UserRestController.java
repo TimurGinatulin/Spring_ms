@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/auth")
 public class UserRestController {
     @Autowired
     private RedisService redisService;
