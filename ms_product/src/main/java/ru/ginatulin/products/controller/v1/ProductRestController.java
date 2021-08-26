@@ -2,8 +2,6 @@ package ru.ginatulin.products.controller.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import ru.ginatulin.products.models.dto.ProductCartDto;
 import ru.ginatulin.products.models.dto.ProductDto;
 import ru.ginatulin.products.models.entity.ProductEntity;
@@ -24,11 +22,6 @@ public class ProductRestController {
 
     @GetMapping
     public List<ProductDto> getAllOrder(@RequestParam(required = false) Long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        System.out.println(currentPrincipalName);
-        System.out.println(authentication.toString());
-        System.out.println(authentication.getAuthorities().toString());
         if (id != null)
             return Collections.singletonList(productRestService.findById(id)).stream().map(ProductDto::new).collect(Collectors.toList());
         return productRestService.findAll();

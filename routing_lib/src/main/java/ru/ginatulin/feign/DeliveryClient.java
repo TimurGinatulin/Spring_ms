@@ -9,7 +9,7 @@ import java.util.List;
 
 @FeignClient("delivery-ms")
 public interface DeliveryClient {
-    @GetMapping("/deliveries")
+    @GetMapping("/api/v1/deliveries")
     List<DeliveryDto> getAllDelivery(@RequestParam(required = false) Long id);
 }
 
