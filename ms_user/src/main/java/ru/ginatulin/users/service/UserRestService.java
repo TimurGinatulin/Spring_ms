@@ -11,6 +11,7 @@ import ru.ginatulin.users.repository.RolesRepository;
 import ru.ginatulin.users.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -74,5 +75,15 @@ public class UserRestService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
         entity.setDeleted_at(LocalDateTime.now());
         return userRepository.save(entity);
+    }
+
+    public List<UserDto> findByIds(List<Long> ids) {
+        List<UserDto> list = new ArrayList<>();
+        for (Long id : ids) {
+            list.add(new UserDto(
+                    userRepository.findById(id)
+                            .orElseThrow(() -> new NotFoundException("User not found"))));
+        }
+        return list;
     }
 }

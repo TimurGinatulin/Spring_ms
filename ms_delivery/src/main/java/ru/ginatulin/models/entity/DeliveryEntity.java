@@ -1,6 +1,6 @@
 package ru.ginatulin.models.entity;
 
-import ru.ginatulin.models.dto.DeliveryCartDto;
+import ru.ginatulin.dto.DeliveryCartDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;

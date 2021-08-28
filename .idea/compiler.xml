@@ -10,6 +10,7 @@
         <module name="ms_storage" />
         <module name="eureka-service" />
         <module name="config-server" />
+        <module name="rabbitmq_task" />
         <module name="ms_user" />
         <module name="ms_delivery" />
         <module name="ms_product" />
@@ -36,6 +37,7 @@
       <module name="ms_product" options="-parameters" />
       <module name="ms_storage" options="-parameters" />
       <module name="ms_user" options="-parameters" />
+      <module name="rabbitmq_task" options="-parameters" />
       <module name="routing_lib" options="-parameters" />
       <module name="zuul-server" options="" />
     </option>

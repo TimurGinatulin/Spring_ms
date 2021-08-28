@@ -4,7 +4,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import ru.ginatulin.dto.OrderDto;
 import ru.ginatulin.feign.OrderClient;
-import ru.ginatulin.models.dto.DeliveryCartDto;
+import ru.ginatulin.dto.DeliveryCartDto;
 import ru.ginatulin.models.dto.DeliveryDto;
 import ru.ginatulin.models.entity.DeliveryAddress;
 import ru.ginatulin.models.entity.DeliveryEntity;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @EnableCircuitBreaker
 @RestController
 @RequestMapping("/deliveries")
@@ -35,14 +36,16 @@ public class DeliveryRestController {
         }
         return deliveryRestService.findAll();
     }
-    @GetMapping
-    public List<DeliveryDto> getListDto(@RequestParam List<Long> ids){
+
+    @GetMapping("/list")
+    @HystrixCommand(fallbackMethod = "exampleMethod")
+    public List<DeliveryDto> getListDto(@RequestParam List<Long> ids) {
         return deliveryRestService.findByIds(ids);
     }
 
     @PostMapping
-    public DeliveryEntity addProduct(@RequestBody DeliveryCartDto deliveryDto) {
-        return deliveryRestService.add(deliveryDto);
+    public DeliveryEntity addDelivery(@RequestBody DeliveryCartDto deliveryDto) {
+        return deliveryRestService.add(deliveryDto, orderClient);
     }
 
     @PutMapping
@@ -55,9 +58,9 @@ public class DeliveryRestController {
         return deliveryRestService.delete(id);
     }
 
-    public List<DeliveryDto> exampleMethod(Long id){
+    public List<DeliveryDto> exampleMethod(Long id) {
         System.out.println("Faulted");
-        return deliveryRestService.findAll();
+        return Collections.emptyList();
     }
 
 }

@@ -10,5 +10,8 @@ import java.util.List;
 @FeignClient("product-ms")
 public interface ProductClient {
     @GetMapping("/api/v1/products")
-    List<ProductDto> getAllOrder(@RequestParam(required = false) Long id);
+    List<ProductDto> getAllProduct(@RequestParam(required = false) Long id);
+
+    @GetMapping("/api/v1/products/list")
+    List<ProductDto> getListDto(@RequestParam List<Long> ids);
 }

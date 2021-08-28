@@ -14,6 +14,7 @@ import ru.ginatulin.core.exceptions.ElementExistException;
 import ru.ginatulin.core.exceptions.NotFoundException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -67,5 +68,13 @@ public class StorageRestService {
                 .orElseThrow(() -> new NotFoundException("Storage not found"));
         entity.setDeletedAt(LocalDateTime.now());
         return storageRepository.save(entity);
+    }
+
+    public List<StorageCartDto> findByIds(List<Long> ids) {
+        List<StorageCartDto> list = new ArrayList<>();
+        for (Long id : ids) {
+            list.add(new StorageCartDto(findById(id)));
+        }
+        return list;
     }
 }

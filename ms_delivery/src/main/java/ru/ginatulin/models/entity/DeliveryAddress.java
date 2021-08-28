@@ -1,6 +1,6 @@
 package ru.ginatulin.models.entity;
 
-import ru.ginatulin.models.dto.DeliveryAddressCartDto;
+import ru.ginatulin.dto.DeliveryAddressCartDto;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -25,6 +25,8 @@ public class DeliveryAddress {
         this.address = address.getAddress();
         this.phone = address.getPhone();
     }
+
+
 
     public Long getIdDelivery() {
         return idDelivery;
