@@ -1,5 +1,6 @@
 package ru.ginatulin.users.controller.v1;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import ru.ginatulin.users.models.entity.UserEntity;
 import ru.ginatulin.users.service.UserRestService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,11 +58,17 @@ public class UserRestController {
     }
 
     @GetMapping
+    @HystrixCommand(fallbackMethod = "exampleMethod")
     public List<UserDto> getAllUsers(@RequestParam(required = false) Long id) {
-
         if (id != null)
             return userRestService.getById(id).stream().map(UserDto::new).collect(Collectors.toList());
         return userRestService.getAllUsers().stream().map(UserDto::new).collect(Collectors.toList());
+    }
+
+    @GetMapping("/list")
+    @HystrixCommand(fallbackMethod = "exampleMethod2")
+    public List<UserDto> getListDto(@RequestParam List<Long> ids) {
+        return userRestService.findByIds(ids);
     }
 
     @PutMapping
@@ -71,5 +79,12 @@ public class UserRestController {
     @DeleteMapping("/{id}")
     public UserEntity deleteUser(@PathVariable Long id) {
         return userRestService.delete(id);
+    }
+
+    public List<UserDto> exampleMethod(Long id) {
+        return Collections.emptyList();
+    }
+    public List<UserDto> exampleMethod2(List<Long> ids) {
+        return Collections.emptyList();
     }
 }

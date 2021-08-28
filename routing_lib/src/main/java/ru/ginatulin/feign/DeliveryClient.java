@@ -11,5 +11,7 @@ import java.util.List;
 public interface DeliveryClient {
     @GetMapping("/api/v1/deliveries")
     List<DeliveryDto> getAllDelivery(@RequestParam(required = false) Long id);
+    @GetMapping("/api/v1/deliveries/list")
+    List<DeliveryDto> getListDto(@RequestParam List<Long> ids);
 }
 

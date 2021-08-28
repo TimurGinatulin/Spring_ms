@@ -1,5 +1,6 @@
 package ru.ginatulin.products.controller.v1;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import ru.ginatulin.products.models.dto.ProductCartDto;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/products")
@@ -21,10 +23,16 @@ public class ProductRestController {
     private ProductRestService productRestService;
 
     @GetMapping
-    public List<ProductDto> getAllOrder(@RequestParam(required = false) Long id) {
+    @HystrixCommand(fallbackMethod = "exampleMethod2")
+    public List<ProductDto> getAllProduct(@RequestParam(required = false) Long id) {
         if (id != null)
-            return Collections.singletonList(productRestService.findById(id)).stream().map(ProductDto::new).collect(Collectors.toList());
+            return Stream.of(productRestService.findById(id)).map(ProductDto::new).collect(Collectors.toList());
         return productRestService.findAll();
+    }
+    @GetMapping("/list")
+    @HystrixCommand(fallbackMethod = "exampleMethod")
+    public List<ProductDto> getListDto(@RequestParam List<Long> ids) {
+        return productRestService.findByIds(ids);
     }
 
     @PostMapping
@@ -39,5 +47,10 @@ public class ProductRestController {
         return productRestService.delete(id);
     }
 
-
+    public List<ProductDto> exampleMethod(List<Long> ids) {
+        return Collections.emptyList();
+    }
+    public List<ProductDto> exampleMethod2(Long id) {
+        return Collections.emptyList();
+    }
 }

@@ -1,7 +1,9 @@
 package ru.ginatulin.service;
 
 import ru.ginatulin.core.exceptions.NotFoundException;
-import ru.ginatulin.models.dto.DeliveryCartDto;
+import ru.ginatulin.dto.OrderDto;
+import ru.ginatulin.feign.OrderClient;
+import ru.ginatulin.dto.DeliveryCartDto;
 import ru.ginatulin.models.dto.DeliveryDto;
 import ru.ginatulin.models.entity.DeliveryAddress;
 import ru.ginatulin.models.entity.DeliveryEntity;
@@ -31,7 +33,11 @@ public class DeliveryRestService {
         return deliveryRepository.findAll().stream().map(DeliveryDto::new).collect(Collectors.toList());
     }
 
-    public DeliveryEntity add(DeliveryCartDto deliveryDto) {
+    public DeliveryEntity add(DeliveryCartDto deliveryDto, OrderClient orderClient) {
+        List<OrderDto> order = orderClient.getAllOrder(deliveryDto.getIdOrder());
+        if (order.isEmpty()) {
+            throw new NotFoundException("Order with id " + deliveryDto.getIdOrder() + " not found");
+        }
         DeliveryEntity entity = deliveryRepository.save(new DeliveryEntity(deliveryDto));
         addressRepository.save(new DeliveryAddress(deliveryDto.getAddress(), entity.getId()));
         return deliveryRepository.findById(entity.getId()).orElseThrow(() -> new NotFoundException(""));
@@ -67,6 +73,7 @@ public class DeliveryRestService {
                 dtos.add(deliveryRepository.findById(id).map(DeliveryDto::new)
                         .orElseThrow(() -> new NotFoundException("Delivery with id: " + id + " not found")));
             } catch (NotFoundException e) {
+                System.out.println("Delivery with id: " + id + " not found");
             }
         }
         return dtos;

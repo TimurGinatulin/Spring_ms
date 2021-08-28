@@ -11,4 +11,7 @@ import java.util.List;
 public interface StorageClient {
     @GetMapping("/api/v1/storages")
     List<StorageCartDto> getAllStorages(@RequestParam(required = false) Long id);
+
+    @GetMapping("/api/v1/storages/list")
+    List<StorageCartDto> getListDto(@RequestParam List<Long> ids);
 }

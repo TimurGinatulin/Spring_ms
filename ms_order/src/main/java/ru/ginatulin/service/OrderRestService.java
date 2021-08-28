@@ -3,7 +3,12 @@ package ru.ginatulin.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ginatulin.core.exceptions.NotFoundException;
+import ru.ginatulin.dto.ProductDto;
+import ru.ginatulin.dto.UserDto;
+import ru.ginatulin.feign.ProductClient;
+import ru.ginatulin.feign.UserClient;
 import ru.ginatulin.models.dto.OrderCartDto;
+import ru.ginatulin.models.dto.OrderDto;
 import ru.ginatulin.models.dto.OrderItemCartDto;
 import ru.ginatulin.models.entity.OrderEntity;
 import ru.ginatulin.models.entity.OrderItemEntity;
@@ -11,6 +16,7 @@ import ru.ginatulin.repository.OrderItemRepository;
 import ru.ginatulin.repository.OrderRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,7 +41,20 @@ public class OrderRestService {
                 .orElseThrow(() -> new NotFoundException("Order with id " + id + " not found"));
     }
 
-    public OrderEntity save(OrderCartDto order) {
+    public OrderEntity save(OrderCartDto order, UserClient userClient, ProductClient productClient) {
+        List<UserDto> user = userClient.getAllUsers(order.getIdUser());
+        if (user.isEmpty())
+            throw new NotFoundException("User not found on order: " + order);
+        List<OrderItemCartDto> checkListDto = new ArrayList<>();
+        for (OrderItemCartDto cart : order.getItemList()) {
+            List<ProductDto> product = productClient.getAllProduct(cart.getIdProduct());
+            if (product != null) {
+                OrderItemCartDto cartDto =
+                        new OrderItemCartDto(product.get(0).getId(), cart.getQuantity(), product.get(0).getPrice());
+                checkListDto.add(cartDto);
+            }
+        }
+        order.setItemList(checkListDto);
         OrderEntity orderEntity = new OrderEntity(order);
         OrderEntity saveEntity = orderRepository.save(orderEntity);
         for (OrderItemCartDto itemCartDto : order.getItemList()) {
@@ -44,5 +63,13 @@ public class OrderRestService {
             orderItemRepository.save(orderItemEntity);
         }
         return findById(saveEntity.getId());
+    }
+
+    public List<OrderDto> findByIds(List<Long> ids) {
+        List<OrderDto> list = new ArrayList<>();
+        for (Long id : ids) {
+            list.add(new OrderDto(findById(id)));
+        }
+        return list;
     }
 }

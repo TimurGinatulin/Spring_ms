@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,5 +34,13 @@ public class ProductRestService {
         ProductEntity entity = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found"));
         entity.setDeletedAt(LocalDateTime.now());
         return productRepository.save(entity);
+    }
+
+    public List<ProductDto> findByIds(List<Long> ids) {
+        List<ProductDto> list = new ArrayList<>();
+        for (Long id : ids) {
+            list.add(new ProductDto(findById(id)));
+        }
+        return list;
     }
 }
