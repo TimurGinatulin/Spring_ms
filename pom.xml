@@ -27,6 +27,7 @@
         <module>config-server</module>
         <module>gateway-server</module>
         <module>rabbitmq_task</module>
+        <module>front-server</module>
     </modules>
 
     <properties>

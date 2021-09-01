@@ -9,6 +9,7 @@ import ru.ginatulin.models.dto.OrderCartDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -36,5 +37,13 @@ public class OrderEntity {
 
     public OrderEntity(OrderCartDto dto) {
         this.idUser = dto.getIdUser();
+    }
+    public OrderEntity(CartEntity cart, Long userId) {
+        this.itemList = new ArrayList<>();
+        this.idUser = userId;
+        for (CartItemEntity ci : cart.getItems()) {
+            OrderItemEntity oi = new OrderItemEntity(ci);
+            this.itemList.add(oi);
+        }
     }
 }

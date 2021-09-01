@@ -5,7 +5,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import ru.ginatulin.core.models.FaultedToken;
+
+import java.time.Duration;
 
 @Service
 @NoArgsConstructor
@@ -15,11 +16,10 @@ public class RedisService {
     private RedisTemplate<String, Object> template;
 
     public void saveToken(String token) {
-        FaultedToken faultedToken = new FaultedToken(token);
-        template.opsForHash().put("TOKEN",faultedToken.getToken(),faultedToken);
+        template.opsForValue().set("TOKEN:" + token, Duration.ofHours(1));
     }
 
     public boolean checkToken(String token) {
-       return template.opsForHash().hasKey("TOKEN",token);
+        return template.opsForValue().get("TOKEN:" + token) != null;
     }
 }
