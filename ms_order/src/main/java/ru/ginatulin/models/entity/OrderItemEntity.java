@@ -29,6 +29,13 @@ public class OrderItemEntity {
         this.price = itemCartDto.getPrice();
     }
 
+    public OrderItemEntity(CartItemEntity cartItem) {
+        this.idProduct = cartItem.getProductId();
+        this.quantity = cartItem.getQuantity();
+        this.price = cartItem.getPricePerProduct();
+        this.price = cartItem.getPrice();
+    }
+
     public Long getIdOrder() {
         return idOrder;
     }
