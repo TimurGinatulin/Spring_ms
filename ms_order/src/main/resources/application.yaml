@@ -1,5 +1,6 @@
+
 server:
-  port: 0
+  port: 2021
   servlet:
     context-path: /api/v1
 spring:

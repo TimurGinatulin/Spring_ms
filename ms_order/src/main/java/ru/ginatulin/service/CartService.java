@@ -3,6 +3,7 @@ package ru.ginatulin.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ginatulin.dto.CartDto;
 import ru.ginatulin.dto.ProductDto;
@@ -13,16 +14,15 @@ import ru.ginatulin.repository.CartRepository;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class CartService {
-
+    @Autowired
     private final CartRepository cartRepository;
-
+    @Autowired
     private final ProductClient productClient;
-
+    @Autowired
     private final ModelMapper modelMapper;
 
     public CartEntity save(CartEntity cart) {
