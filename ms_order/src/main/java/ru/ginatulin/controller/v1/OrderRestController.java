@@ -2,11 +2,13 @@ package ru.ginatulin.controller.v1;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.ginatulin.feign.ProductClient;
 import ru.ginatulin.feign.UserClient;
 import ru.ginatulin.models.dto.OrderCartDto;
 import ru.ginatulin.models.dto.OrderDto;
+import ru.ginatulin.models.entity.OrderEntity;
 import ru.ginatulin.service.OrderRestService;
 
 import java.util.Collections;
@@ -25,20 +27,25 @@ public class OrderRestController {
     private ProductClient productClient;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     @HystrixCommand(defaultFallback = "exampleMethod")
     public List<OrderDto> getAllOrder(@RequestParam(required = false) Long id) {
         if (id != null)
             return Stream.of(orderRestService.findById(id)).map(OrderDto::new).collect(Collectors.toList());
         return orderRestService.findAll().stream().map(OrderDto::new).collect(Collectors.toList());
     }
+
     @GetMapping("/list")
     @HystrixCommand(fallbackMethod = "exampleMethod")
     public List<OrderDto> getListDto(@RequestParam List<Long> ids) {
         return orderRestService.findByIds(ids);
     }
+
     @PostMapping
+    @ResponseStatus (HttpStatus.CREATED)
     public OrderDto saveOrder(@RequestBody OrderCartDto order) {
-        return new OrderDto(orderRestService.save(order,userClient,productClient));
+        OrderEntity save = orderRestService.save(order, userClient, productClient);
+        return new OrderDto(save);
     }
 
     @DeleteMapping("/{id}")

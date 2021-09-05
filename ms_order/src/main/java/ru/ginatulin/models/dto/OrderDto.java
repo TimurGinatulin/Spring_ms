@@ -8,6 +8,7 @@ import ru.ginatulin.models.entity.OrderItemEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +21,9 @@ public class OrderDto {
         this.id = entity.getId();
         this.idUser = entity.getIdUser();
         this.itemList = new ArrayList<>();
-        for (OrderItemEntity entity1: entity.getItemList())
-        itemList.add(new OrderItemDto(entity1));
+        if (entity.getItemList() != null) {
+            for (OrderItemEntity entity1 : entity.getItemList())
+                itemList.add(new OrderItemDto(entity1));
+        }
     }
 }

@@ -9,6 +9,6 @@ import java.util.List;
 
 @FeignClient("user-ms")
 public interface UserClient {
-    @GetMapping("/api/v1/users")
+    @GetMapping("/api/v1/auth")
     List<UserDto> getAllUsers(@RequestParam(required = false) Long id);
 }
