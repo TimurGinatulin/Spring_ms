@@ -5,9 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.ginatulin.dto.CartDto;
+import ru.ginatulin.core.exceptions.NotFoundException;
 import ru.ginatulin.dto.ProductDto;
 import ru.ginatulin.feign.ProductClient;
+import ru.ginatulin.models.dto.CartDto;
 import ru.ginatulin.models.entity.CartEntity;
 import ru.ginatulin.models.entity.CartItemEntity;
 import ru.ginatulin.repository.CartRepository;
@@ -30,28 +31,30 @@ public class CartService {
     }
 
     public CartDto findById(String id) {
-        return modelMapper.map(cartRepository.findById(id).get(), CartDto.class);
+        return new CartDto(cartRepository.findById(id).orElseThrow(()->new NotFoundException("Cart not found")));
     }
 
     @Transactional
     public void addToCart(String cartId, Long productId) {
-        CartDto cartDto = findById(cartId);
-        CartEntity cart = modelMapper.map(cartDto, CartEntity.class);
+        CartEntity cart = cartRepository.findById(cartId).orElseThrow(()-> new NotFoundException("User not found"));
         CartItemEntity cartItem = cart.getItemByProductId(productId);
         if (cartItem != null) {
             cartItem.incrementQuantity();
             cart.recalculate();
             return;
         }
-        ProductDto p = productClient.getAllProduct(productId).get(0);
+        ProductDto p = productClient.getDto(productId);
         cart.add(new CartItemEntity(p));
+        cartRepository.save(cart);
     }
 
     @Transactional
     public void clearCart(String cartId) {
         CartDto cartDto = findById(cartId);
         CartEntity cart = modelMapper.map(cartDto, CartEntity.class);
+        cart.setId(cartId);
         cart.clear();
+        cartRepository.save(cart);
     }
 
     public Optional<CartEntity> findByUserId(Long id) {
@@ -70,10 +73,10 @@ public class CartService {
             }
             cart.setUserId(userId);
         }
-        if (userId == null) {
-            CartEntity cart = save(new CartEntity());
-            return cart.getId();
-        }
+//        if (userId == null) {
+//            CartEntity cart = save(new CartEntity());
+//            return cart.getId();
+//        }
         Optional<CartEntity> cart = findByUserId(userId);
         if (cart.isPresent()) {
             return cart.get().getId();

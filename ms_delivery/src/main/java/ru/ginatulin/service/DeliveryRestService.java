@@ -1,16 +1,14 @@
 package ru.ginatulin.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.ginatulin.core.exceptions.NotFoundException;
-import ru.ginatulin.dto.OrderDto;
-import ru.ginatulin.feign.OrderClient;
 import ru.ginatulin.dto.DeliveryCartDto;
 import ru.ginatulin.models.dto.DeliveryDto;
 import ru.ginatulin.models.entity.DeliveryAddress;
 import ru.ginatulin.models.entity.DeliveryEntity;
 import ru.ginatulin.repository.AddressRepository;
 import ru.ginatulin.repository.DeliveryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,11 +31,8 @@ public class DeliveryRestService {
         return deliveryRepository.findAll().stream().map(DeliveryDto::new).collect(Collectors.toList());
     }
 
-    public DeliveryEntity add(DeliveryCartDto deliveryDto, OrderClient orderClient) {
-        List<OrderDto> order = orderClient.getAllOrder(deliveryDto.getIdOrder());
-        if (order.isEmpty()) {
-            throw new NotFoundException("Order with id " + deliveryDto.getIdOrder() + " not found");
-        }
+    public DeliveryEntity add(DeliveryCartDto deliveryDto) {
+        System.out.println("");
         DeliveryEntity entity = deliveryRepository.save(new DeliveryEntity(deliveryDto));
         addressRepository.save(new DeliveryAddress(deliveryDto.getAddress(), entity.getId()));
         return deliveryRepository.findById(entity.getId()).orElseThrow(() -> new NotFoundException(""));

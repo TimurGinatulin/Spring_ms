@@ -7,5 +7,5 @@ import ru.ginatulin.models.entity.OrderEntity;
 import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
-    List<OrderEntity> findAll();
+    List<OrderEntity> findAllByIdUser(Long UserId);
 }
