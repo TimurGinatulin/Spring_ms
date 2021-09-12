@@ -46,4 +46,12 @@ public class OrderEntity {
             this.itemList.add(oi);
         }
     }
+
+    public OrderEntity(CartEntity cartEntity) {
+        this.itemList = new ArrayList<>();
+        this.idUser = cartEntity.getUserId();
+        for (CartItemEntity item:cartEntity.getItems()){
+            itemList.add(new OrderItemEntity(item));
+        }
+    }
 }

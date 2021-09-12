@@ -28,6 +28,8 @@ public class CartItemEntity {
 
     @Column(name = "quantity")
     private int quantity;
+    @Column(name = "title")
+    private String tile;
 
     @Column(name = "price_per_product")
     private Double pricePerProduct;
@@ -48,6 +50,7 @@ public class CartItemEntity {
         this.quantity = 1;
         this.pricePerProduct = product.getPrice();
         this.price = this.pricePerProduct;
+        this.tile = product.getTitle();
     }
 
     public void incrementQuantity() {

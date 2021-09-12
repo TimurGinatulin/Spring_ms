@@ -1,37 +1,27 @@
 package ru.ginatulin.controller.v1;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import ru.ginatulin.core.interfaces.ITokenService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import ru.ginatulin.core.models.UserInfo;
-import ru.ginatulin.dto.CartDto;
+import ru.ginatulin.models.dto.CartDto;
+import ru.ginatulin.models.models.Response;
 import ru.ginatulin.service.CartService;
 
-import java.util.UUID;
-
 @RestController
-@RequestMapping("/api/v1/cart")
+@RequestMapping("/cart")
 @RequiredArgsConstructor
 public class CartController {
 
     private final CartService cartService;
 
-    private final ITokenService tokenService;
-
     @PostMapping
-    public String createNewCart(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token) {
-        if (token == null) {
-            return cartService.getCartForUser(null, null);
-        }
-        UserInfo userInfo = tokenService.parseToken(token);
-        return cartService.getCartForUser(userInfo.getUserId(), null);
+    public Response createNewCart() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal.equals("anonymousUser"))
+            return new Response(403,"Not authorize");
+        UserInfo userInfo = (UserInfo) principal;
+        return new Response(200,cartService.getCartForUser(userInfo.getUserId(), null));
     }
 
     @GetMapping("/{uuid}")
